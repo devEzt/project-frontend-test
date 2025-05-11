@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Serif } from "next/font/google";
 import "./globals.css";
 import { ClientRootLayout } from "@/components/layout/client-root-layout";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-sans",
+});
+
+const notoSerif = Noto_Serif({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-serif",
 });
 
 export const metadata: Metadata = {
@@ -20,7 +27,10 @@ export default function RootLayoutApp({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
+      <body
+        className={`${inter.variable} ${notoSerif.variable} ${inter.className}`}
+        suppressHydrationWarning={true}
+      >
         <ClientRootLayout>{children}</ClientRootLayout>
       </body>
     </html>

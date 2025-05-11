@@ -42,9 +42,9 @@ export function Sidebar() {
   };
 
   return (
-    <div className="min-w-64 h-screen border-r bg-background flex flex-col">
+    <div className="min-w-64 h-screen border-r border-[#e4e4e7] bg-[#fbfbfb] flex flex-col">
       {/* Logo */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b border-[#e4e4e7]">
         <Button variant="ghost" className="font-bold text-xl p-2 text-black">
           Logo
         </Button>
@@ -96,7 +96,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <div className="mt-auto p-4 border-t flex items-center gap-2">
+      <div className="mt-auto p-4 border-t border-[#e4e4e7] flex items-center gap-2">
         <LifeBuoy className="h-4 w-4 text-muted-foreground" />
         <span className="text-sm text-muted-foreground">Precisa de ajuda?</span>
       </div>

@@ -17,18 +17,18 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       {/* Sidebar */}
-      <aside className="w-60 border-r flex flex-col bg-white">
+      <aside className="w-60 border-r border-[#e4e4e7] flex flex-col bg-[#fbfbfb]">
         {/* Logo */}
-        <div className="pl-6 pr-0 h-16 border-b flex items-center">
+        <div className="pl-6 pr-0 h-16 border-b border-[#e4e4e7] flex items-center">
           <div className="w-[96px] h-[32px] bg-black text-white rounded-md flex items-center justify-center font-medium">
             Logo
           </div>
         </div>
 
         {/* Filial selector */}
-        <div className="p-6 border-b">
+        <div className="p-6 border-b border-[#e4e4e7]">
           <button className="w-full flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 font-medium">
@@ -98,7 +98,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Help */}
-        <div className="mt-auto p-6 border-t">
+        <div className="mt-auto p-6 border-t border-[#e4e4e7]">
           <div className="flex items-center justify-between text-gray-600">
             <span>Precisa de ajuda?</span>
             <Headphones className="h-5 w-5" strokeWidth={1.5} />
@@ -109,7 +109,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="h-16 border-b flex items-center justify-end bg-white px-6">
+        <header className="h-16 border-b border-[#e4e4e7] flex items-center justify-end bg-white px-6">
           <div className="flex items-center gap-4">
             <button className="text-gray-400">
               <Clock className="h-5 w-5" />
@@ -125,7 +125,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-0">{children}</main>
       </div>
     </div>
   );
