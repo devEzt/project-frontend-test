@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import {
   Bell,
   ChevronDown,
-  Clock,
+  HelpCircle,
   FileText,
   Headphones,
   LayoutDashboard,
@@ -176,15 +176,19 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
           </button>
 
           <div className="flex items-center gap-4">
-            <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer h-8 w-8 rounded-full flex items-center justify-center hover:bg-gray-50">
-              <Clock className="h-5 w-5" />
+            <button className="text-black hover:text-gray-900 transition-colors cursor-pointer h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-50 border border-gray-200">
+              <HelpCircle className="h-5 w-5" />
             </button>
-            <button className="relative text-gray-400 hover:text-gray-600 transition-colors cursor-pointer h-8 w-8 rounded-full flex items-center justify-center hover:bg-gray-50">
+            <button className="relative text-black hover:text-gray-900 transition-colors cursor-pointer h-10 w-10 rounded-full flex items-center justify-center hover:bg-gray-50 border border-gray-200">
               <Bell className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full" />
             </button>
-            <div className="h-8 w-8 ml-1 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-200 transition-colors">
-              US
+            <div className="h-10 w-10 ml-2 rounded-full overflow-hidden cursor-pointer hover:opacity-90 transition-colors">
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                alt="Perfil do usuário"
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
         </header>
