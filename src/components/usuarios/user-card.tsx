@@ -19,16 +19,27 @@ interface UserCardProps {
 }
 
 export function UserCard({ usuario, onEdit }: UserCardProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpenDesktop, setMenuOpenDesktop] = useState(false);
+  const [menuOpenMobile, setMenuOpenMobile] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRefDesktop = useRef<HTMLDivElement>(null);
+  const menuRefMobile = useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
+      if (
+        menuRefDesktop.current &&
+        !menuRefDesktop.current.contains(event.target as Node)
+      ) {
+        setMenuOpenDesktop(false);
+      }
+      if (
+        menuRefMobile.current &&
+        !menuRefMobile.current.contains(event.target as Node)
+      ) {
+        setMenuOpenMobile(false);
       }
     }
 
@@ -39,12 +50,14 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
   }, []);
 
   const handleEdit = () => {
-    setMenuOpen(false);
+    setMenuOpenDesktop(false);
+    setMenuOpenMobile(false);
     onEdit();
   };
 
   const handleDelete = () => {
-    setMenuOpen(false);
+    setMenuOpenDesktop(false);
+    setMenuOpenMobile(false);
     setConfirmOpen(true);
   };
 
@@ -123,6 +136,46 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
             {usuario.status}
           </span>
 
+          <div className="sm:hidden relative" ref={menuRefMobile}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-gray-600 cursor-pointer transition-colors rounded-full h-8 w-8 flex items-center justify-center hover:bg-gray-50 p-0"
+              onClick={() => setMenuOpenMobile(!menuOpenMobile)}
+              title="Opções"
+              aria-label="Opções do usuário"
+            >
+              <MoreHorizontal size={20} strokeWidth={1.5} />
+            </Button>
+
+            {menuOpenMobile && (
+              <div
+                className="fixed top-auto left-auto bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]"
+                style={{
+                  width: "192px",
+                  transform: "translate(-70%, 10px)",
+                }}
+              >
+                <div className="p-1">
+                  <button
+                    onClick={handleEdit}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
+                  >
+                    <Pencil className="h-4 w-4 text-gray-500" />
+                    <span>Editar</span>
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span>Excluir</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={toggleExpanded}
             className="sm:hidden text-gray-400 hover:text-gray-600 transition-colors"
@@ -137,18 +190,26 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
             />
           </button>
 
-          <div className="relative hidden sm:block" ref={menuRef}>
+          <div className="relative hidden sm:block" ref={menuRefDesktop}>
             <Button
               variant="ghost"
               size="icon"
               className="text-gray-400 hover:text-gray-600 cursor-pointer transition-colors rounded-full h-8 w-8 flex items-center justify-center hover:bg-gray-50 p-0"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => setMenuOpenDesktop(!menuOpenDesktop)}
+              title="Opções"
+              aria-label="Opções do usuário"
             >
               <MoreHorizontal size={20} strokeWidth={1.5} />
             </Button>
 
-            {menuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            {menuOpenDesktop && (
+              <div
+                className="fixed top-auto left-auto bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]"
+                style={{
+                  width: "192px",
+                  transform: "translate(-70%, 10px)",
+                }}
+              >
                 <div className="p-1">
                   <button
                     onClick={handleEdit}

@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserCard } from "./user-card";
-import { Search, ChevronLeft, ChevronRight, ListFilter } from "lucide-react";
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  ListFilter,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,119 +35,61 @@ export interface Usuario {
   rg?: string;
 }
 
-const mockUsuarios: Usuario[] = [
-  {
-    id: "JG",
-    nome: "José Ricardo Gomes",
-    idade: 51,
-    genero: "Homem",
-    dataRegistro: "22/03/2025 - 10:21am",
-    tempoSessao: "38m22s",
-    status: "Ativo",
-    tipo: "Usuário padrão",
-    email: "jose.ricardo@exemplo.com",
-    telefone: "(11) 98765-4321",
-    whatsapp: true,
-    cpf: "123.456.789-00",
-    rg: "12.345.678-9",
-  },
-  {
-    id: "HS",
-    nome: "Helena Soares",
-    idade: 46,
-    genero: "Mulher",
-    dataRegistro: "22/03/2025 - 10:21am",
-    tempoSessao: "38m22s",
-    status: "Inativo",
-    tipo: "Usuário padrão",
-    email: "helena.soares@exemplo.com",
-    telefone: "(11) 91234-5678",
-    whatsapp: false,
-    cpf: "987.654.321-00",
-    rg: "98.765.432-1",
-  },
-  {
-    id: "DS",
-    nome: "Débora Santana",
-    idade: 24,
-    genero: "Mulher",
-    dataRegistro: "22/03/2025 - 10:21am",
-    tempoSessao: "38m22s",
-    status: "Inativo",
-    tipo: "Usuário padrão",
-    email: "debora.santana@exemplo.com",
-    telefone: "(11) 99876-5432",
-    whatsapp: true,
-    cpf: "456.789.123-00",
-    rg: "45.678.912-3",
-  },
-  {
-    id: "LS",
-    nome: "Lucas Rocha Silveira",
-    idade: 31,
-    genero: "Homem",
-    dataRegistro: "22/03/2025 - 10:21am",
-    tempoSessao: "38m22s",
-    status: "Ativo",
-    tipo: "Usuário padrão",
-    email: "lucas.rocha@exemplo.com",
-    telefone: "(11) 94567-8912",
-    whatsapp: false,
-    cpf: "789.123.456-00",
-    rg: "78.912.345-6",
-  },
-  {
-    id: "SA",
-    nome: "Sérgio Arantes",
-    idade: 36,
-    genero: "Homem",
-    dataRegistro: "22/03/2025 - 10:21am",
-    tempoSessao: "38m22s",
-    status: "Ativo",
-    tipo: "Usuário padrão",
-    email: "sergio.arantes@exemplo.com",
-    telefone: "(11) 92345-6789",
-    whatsapp: true,
-    cpf: "234.567.891-00",
-    rg: "23.456.789-1",
-  },
-  {
-    id: "AC",
-    nome: "Adriano Costa",
-    idade: 38,
-    genero: "Homem",
-    dataRegistro: "22/03/2025 - 10:21am",
-    tempoSessao: "38m22s",
-    status: "Ativo",
-    tipo: "Usuário padrão",
-    email: "adriano.costa@exemplo.com",
-    telefone: "(11) 98765-1234",
-    whatsapp: false,
-    cpf: "567.891.234-00",
-    rg: "56.789.123-4",
-  },
-];
-
 interface UserListProps {
   onEditUsuario: (usuario: Usuario) => void;
+  totalUsuarios?: string;
+  usuariosAtivos?: string;
+  usuariosInativos?: string;
+  tempoMedioSessao?: string;
+  usuariosFilial?: Usuario[];
+  filialId?: string;
 }
 
-export function UserList({ onEditUsuario }: UserListProps) {
-  const [usuarios] = useState<Usuario[]>(mockUsuarios);
+export function UserList({
+  onEditUsuario,
+  totalUsuarios = "294",
+  usuariosAtivos = "203",
+  usuariosInativos = "127",
+  tempoMedioSessao = "31m 20s",
+  usuariosFilial = [],
+  filialId = "FA",
+}: UserListProps) {
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [usuariosPaginados, setUsuariosPaginados] = useState<Usuario[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const totalUsuarios = "294";
-  const usuariosAtivos = "203";
-  const usuariosInativos = "127";
-  const tempoMedioSessao = "31m 20s";
+  useEffect(() => {
+    setIsLoading(true);
+
+    const timeout = setTimeout(() => {
+      if (usuariosFilial && usuariosFilial.length > 0) {
+        setUsuarios(usuariosFilial);
+      }
+      setCurrentPage(1);
+      setIsLoading(false);
+    }, 800);
+
+    return () => clearTimeout(timeout);
+  }, [usuariosFilial, filialId]);
+
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setUsuariosPaginados(usuarios.slice(startIndex, endIndex));
+  }, [usuarios, currentPage, itemsPerPage]);
 
   const toggleFilters = () => {
     setFiltersVisible(!filtersVisible);
   };
 
-  const totalPages = Math.ceil(parseInt(totalUsuarios) / itemsPerPage);
+  const totalPagesCalculated = Math.ceil(usuarios.length / itemsPerPage);
+  const totalPages =
+    usuarios.length > 0
+      ? totalPagesCalculated
+      : Math.ceil(parseInt(totalUsuarios) / itemsPerPage);
 
   const paginationItems = () => {
     const items = [];
@@ -293,19 +241,31 @@ export function UserList({ onEditUsuario }: UserListProps) {
         )}
       </div>
 
-      <div className="space-y-2 px-4 sm:px-10 font-sans">
-        {usuarios.map((usuario) => (
-          <UserCard
-            key={usuario.id}
-            usuario={usuario}
-            onEdit={() => onEditUsuario(usuario)}
-          />
-        ))}
+      <div className="space-y-2 px-4 sm:px-10 font-sans min-h-[400px]">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center h-[400px]">
+            <Loader2 className="h-8 w-8 text-gray-400 animate-spin mb-4" />
+            <p className="text-gray-500">Carregando usuários...</p>
+          </div>
+        ) : usuariosPaginados.length > 0 ? (
+          usuariosPaginados.map((usuario) => (
+            <UserCard
+              key={usuario.id}
+              usuario={usuario}
+              onEdit={() => onEditUsuario(usuario)}
+            />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center h-[400px]">
+            <p className="text-gray-500">Nenhum usuário encontrado.</p>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-5 px-4 sm:px-10 font-sans gap-4">
         <span className="text-[14px] text-gray-500 order-3 sm:order-1 text-center sm:text-left">
-          {itemsPerPage} de {totalUsuarios} itens
+          {isLoading ? "0" : Math.min(itemsPerPage, usuarios.length)} de{" "}
+          {isLoading ? "0" : usuarios.length} itens
         </span>
 
         <div className="flex items-center justify-center gap-1 order-1 sm:order-2">
@@ -313,7 +273,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
             variant="ghost"
             className="px-2 sm:px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
             onClick={() => currentPage > 1 && changePage(currentPage - 1)}
-            disabled={currentPage === 1}
+            disabled={currentPage === 1 || isLoading}
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             <span className="hidden sm:inline">Anterior</span>
@@ -334,6 +294,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
                     : "text-gray-500 hover:bg-gray-50"
                 } rounded-md px-2 cursor-pointer transition-colors`}
                 onClick={() => changePage(Number(item))}
+                disabled={isLoading}
               >
                 {item}
               </Button>
@@ -346,7 +307,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
             onClick={() =>
               currentPage < totalPages && changePage(currentPage + 1)
             }
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages || isLoading}
           >
             <span className="hidden sm:inline">Próxima</span>
             <ChevronRight className="h-4 w-4 ml-1" />
@@ -358,6 +319,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
           <Select
             value={itemsPerPage.toString()}
             onValueChange={changeItemsPerPage}
+            disabled={isLoading}
           >
             <SelectTrigger className="w-[70px] border border-gray-200 rounded px-2 py-1 h-auto">
               <SelectValue placeholder={itemsPerPage.toString()} />

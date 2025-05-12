@@ -1,10 +1,12 @@
 "use client";
 
+import React from "react";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import {
   Bell,
   ChevronDown,
+  ChevronUp,
   HelpCircle,
   FileText,
   Headphones,
@@ -14,9 +16,39 @@ import {
   Settings,
   Users,
   X,
+  User,
+  LogOut,
+  Shield,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+
+export const filiaisData = [
+  {
+    id: "FA",
+    nome: "Filial A",
+    usuarios: "294",
+    usuariosAtivos: "203",
+    usuariosInativos: "127",
+    tempoMedioSessao: "31m 20s",
+  },
+  {
+    id: "FB",
+    nome: "Filial B",
+    usuarios: "156",
+    usuariosAtivos: "98",
+    usuariosInativos: "58",
+    tempoMedioSessao: "27m 45s",
+  },
+  {
+    id: "FC",
+    nome: "Filial C",
+    usuarios: "312",
+    usuariosAtivos: "245",
+    usuariosInativos: "67",
+    tempoMedioSessao: "42m 12s",
+  },
+];
 
 export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,9 +56,12 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const [isMobile, setIsMobile] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [filialAtual, setFilialAtual] = useState(0);
 
   const helpRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -47,6 +82,22 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   }, [isMobile]);
 
   useEffect(() => {
+    const storedFilial = localStorage.getItem("filialAtual");
+    if (storedFilial) {
+      setFilialAtual(Number(storedFilial));
+    }
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "filialAtual") {
+        setFilialAtual(Number(e.newValue || "0"));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (helpRef.current && !helpRef.current.contains(event.target as Node)) {
         setHelpOpen(false);
@@ -56,6 +107,12 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         !notificationsRef.current.contains(event.target as Node)
       ) {
         setNotificationsOpen(false);
+      }
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setUserMenuOpen(false);
       }
     }
 
@@ -72,11 +129,42 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const toggleHelp = () => {
     setHelpOpen(!helpOpen);
     if (notificationsOpen) setNotificationsOpen(false);
+    if (userMenuOpen) setUserMenuOpen(false);
   };
 
   const toggleNotifications = () => {
     setNotificationsOpen(!notificationsOpen);
     if (helpOpen) setHelpOpen(false);
+    if (userMenuOpen) setUserMenuOpen(false);
+  };
+
+  const toggleUserMenu = () => {
+    setUserMenuOpen(!userMenuOpen);
+    if (helpOpen) setHelpOpen(false);
+    if (notificationsOpen) setNotificationsOpen(false);
+  };
+
+  const proximaFilial = () => {
+    const novaFilial =
+      filialAtual < filiaisData.length - 1 ? filialAtual + 1 : filialAtual;
+    setFilialAtual(novaFilial);
+    localStorage.setItem("filialAtual", novaFilial.toString());
+
+    const event = new CustomEvent("filialChanged", {
+      detail: { filialId: novaFilial },
+    });
+    window.dispatchEvent(event);
+  };
+
+  const filialAnterior = () => {
+    const novaFilial = filialAtual > 0 ? filialAtual - 1 : filialAtual;
+    setFilialAtual(novaFilial);
+    localStorage.setItem("filialAtual", novaFilial.toString());
+
+    const event = new CustomEvent("filialChanged", {
+      detail: { filialId: novaFilial },
+    });
+    window.dispatchEvent(event);
   };
 
   return (
@@ -107,15 +195,42 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="p-6 border-b border-[#e4e4e7]">
-          <button className="w-full flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 font-medium">
-                FA
+          <div className="flex items-center justify-between">
+            <div className="w-full flex items-center gap-3 bg-gray-50 rounded-lg p-4 transition-colors">
+              <div className="h-14 w-14 bg-gray-100 rounded-lg flex items-center justify-center text-gray-800 font-bold text-xl">
+                {filiaisData[filialAtual].id}
               </div>
-              <span className="text-gray-700">Filial A</span>
+              <div className="flex-1">
+                <span className="text-gray-800 text-lg font-medium">
+                  {filiaisData[filialAtual].nome}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <button
+                  onClick={filialAnterior}
+                  disabled={filialAtual === 0}
+                  className={`flex items-center justify-center p-1 ${
+                    filialAtual === 0
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-gray-600 hover:bg-gray-200"
+                  } rounded-md transition-colors`}
+                >
+                  <ChevronUp className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={proximaFilial}
+                  disabled={filialAtual === filiaisData.length - 1}
+                  className={`flex items-center justify-center p-1 ${
+                    filialAtual === filiaisData.length - 1
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-gray-600 hover:bg-gray-200"
+                  } rounded-md transition-colors`}
+                >
+                  <ChevronDown className="h-5 w-5" />
+                </button>
+              </div>
             </div>
-            <ChevronDown className="h-5 w-5 text-gray-400" />
-          </button>
+          </div>
         </div>
 
         <div className="px-6 pt-6 pb-3">
@@ -342,12 +457,84 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
               )}
             </div>
 
-            <div className="h-10 w-10 ml-2 rounded-full overflow-hidden cursor-pointer hover:opacity-90 transition-colors">
-              <img
-                src="https://randomuser.me/api/portraits/men/32.jpg"
-                alt="Perfil do usuário"
-                className="h-full w-full object-cover"
-              />
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={toggleUserMenu}
+                className="h-10 w-10 rounded-full overflow-hidden cursor-pointer hover:opacity-90 transition-colors border-2 border-transparent hover:border-gray-200"
+                aria-label="Menu do usuário"
+              >
+                <img
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="Perfil do usuário"
+                  className="h-full w-full object-cover"
+                />
+              </button>
+
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  <div className="p-3 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full overflow-hidden">
+                        <img
+                          src="https://randomuser.me/api/portraits/men/32.jpg"
+                          alt="Perfil do usuário"
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">
+                          João Silva
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          joao.silva@exemplo.com
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2">
+                    <ul className="space-y-1">
+                      <li>
+                        <a
+                          href="#"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-50"
+                        >
+                          <User className="h-4 w-4" />
+                          <span>Meu Perfil</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-50"
+                        >
+                          <Settings className="h-4 w-4" />
+                          <span>Configurações</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-50"
+                        >
+                          <Shield className="h-4 w-4" />
+                          <span>Privacidade</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="p-2 border-t border-gray-100">
+                    <a
+                      href="#"
+                      className="flex items-center gap-3 px-3 py-2 text-sm text-red-600 rounded-md hover:bg-red-50"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sair</span>
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
