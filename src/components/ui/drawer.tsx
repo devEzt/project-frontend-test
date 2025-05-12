@@ -48,10 +48,22 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
     return (
       <>
         {isOpen && (
-          <div
-            className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ease-in-out"
-            onClick={() => handleOpenChange(false)}
-          />
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ease-in-out"
+              onClick={() => handleOpenChange(false)}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: "100vw",
+                height: "100vh",
+                overflow: "hidden",
+              }}
+            />
+          </>
         )}
         <div
           className={cn(sheetVariants({ side }), className)}
@@ -70,6 +82,8 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
               ? "translateX(100%)"
               : "translateX(-100%)",
             transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+            height: side === "right" || side === "left" ? "100vh" : undefined,
+            maxHeight: "100vh",
             ...props.style,
           }}
         >

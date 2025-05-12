@@ -10,9 +10,16 @@
   --border: 214 32% 91%;
 }
 
+html, body {
+  height: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
 body {
   background-color: #f9fafb;
   color: #111827;
+  position: relative;
 }
 
 .toggle-checkbox:checked {

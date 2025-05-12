@@ -134,7 +134,7 @@ export default function UsuariosPage() {
           open={isAddUserOpen}
           onOpenChange={handleCloseDrawer}
           side="right"
-          className="w-[560px] h-screen p-6 overflow-y-auto"
+          className="w-[560px] h-full p-6 overflow-y-auto"
         >
           <SheetClose onClick={handleCloseDrawer} />
           <SheetHeader>
