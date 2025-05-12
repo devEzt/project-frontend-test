@@ -10,12 +10,12 @@ const sheetVariants = cva(
   {
     variants: {
       side: {
-        top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+        top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=closed]:duration-300 data-[state=open]:slide-in-from-top data-[state=open]:duration-500",
         bottom:
-          "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-        left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+          "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=closed]:duration-300 data-[state=open]:slide-in-from-bottom data-[state=open]:duration-500",
+        left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=closed]:duration-300 data-[state=open]:slide-in-from-left data-[state=open]:duration-500 sm:max-w-sm",
         right:
-          "inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
+          "inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=closed]:duration-300 data-[state=open]:slide-in-from-right data-[state=open]:duration-500",
       },
     },
     defaultVariants: {
@@ -47,36 +47,55 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
       onOpenChange?.(newState);
     };
 
+    // Determine a transformação baseada no lado
+    const getTransformValue = () => {
+      if (isOpen) return "translate(0, 0)";
+
+      switch (side) {
+        case "top":
+          return "translate(0, -100%)";
+        case "bottom":
+          return "translate(0, 100%)";
+        case "left":
+          return "translate(-100%, 0)";
+        case "right":
+        default:
+          return "translate(100%, 0)";
+      }
+    };
+
     return (
       <>
-        {isOpen && (
-          <div
-            className="fixed inset-0 z-40 bg-black/50"
-            onClick={() => handleOpenChange(false)}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              width: "100vw",
-              height: "100vh",
-            }}
-          />
-        )}
+        {/* Overlay com transição suave e opacidade aumentada */}
+        <div
+          className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ease-in-out ${
+            isOpen ? "opacity-75" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => handleOpenChange(false)}
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+          }}
+        />
+
+        {/* Drawer com transição suave */}
         <div
           data-state={isOpen ? "open" : "closed"}
           className={cn(sheetVariants({ side }), className)}
           ref={ref}
           {...props}
           style={{
-            transform: isOpen
-              ? "translateX(0)"
-              : side === "right"
-              ? "translateX(100%)"
-              : "translateX(-100%)",
-            transition: "transform 0.3s ease-in-out",
-            display: isOpen ? "block" : "none",
+            transform: getTransformValue(),
+            transition:
+              "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+            opacity: isOpen ? 1 : 0,
+            visibility: isOpen ? "visible" : "hidden",
             ...props.style,
           }}
         >
@@ -93,7 +112,7 @@ const SheetHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex flex-col space-y-1 text-left mb-2", className)}
+    className={cn("flex flex-col space-y-1.5 text-left mb-4", className)}
     {...props}
   />
 );
@@ -142,7 +161,7 @@ const SheetClose = React.forwardRef<
   <button
     ref={ref}
     className={cn(
-      "absolute right-6 top-6 rounded-full p-2 bg-white text-gray-500 hover:text-gray-700 focus:outline-none shadow-sm",
+      "absolute right-6 top-6 rounded-full p-2 bg-white text-gray-500 hover:text-gray-700 focus:outline-none shadow-sm transition-all hover:scale-105 duration-200",
       className
     )}
     {...props}

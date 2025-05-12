@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { UserCard } from "./user-card";
+import { ListFilter } from "lucide-react";
 
 interface Usuario {
   id: string;
@@ -147,23 +148,8 @@ export function UserList() {
             className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none text-sm font-sans"
           />
         </div>
-        <button className="ml-3 bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-gray-500"
-          >
-            <path
-              d="M2 4H14M6.66667 8H14M11.3333 12H14"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        <button className="ml-3 bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors">
+          <ListFilter className="h-5 w-5 text-gray-500" strokeWidth={1.5} />
         </button>
       </div>
 
@@ -179,7 +165,7 @@ export function UserList() {
         <span className="text-[14px] text-gray-500">5 de 294 itens</span>
 
         <div className="flex items-center gap-1">
-          <button className="px-3 py-1 text-[14px] text-gray-500 flex items-center">
+          <button className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded">
             <svg
               width="16"
               height="16"
@@ -198,17 +184,17 @@ export function UserList() {
             </svg>
             Anterior
           </button>
-          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] bg-primary text-white rounded px-2">
+          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] bg-primary text-white rounded px-2 cursor-pointer">
             1
           </button>
-          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2">
+          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded">
             2
           </button>
           <span className="text-gray-500">...</span>
-          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2">
+          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded">
             58
           </button>
-          <button className="px-3 py-1 text-[14px] text-gray-500 flex items-center">
+          <button className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded">
             Próxima
             <svg
               width="16"
@@ -231,7 +217,7 @@ export function UserList() {
 
         <div className="flex items-center gap-2">
           <span className="text-[14px] text-gray-500">Itens por página:</span>
-          <select className="border border-gray-200 rounded px-2 py-1 text-[14px]">
+          <select className="border border-gray-200 rounded px-2 py-1 text-[14px] cursor-pointer">
             <option>10</option>
             <option>20</option>
             <option>50</option>

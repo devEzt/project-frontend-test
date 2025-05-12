@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import {
   Bell,
   ChevronDown,
@@ -8,18 +9,59 @@ import {
   FileText,
   Headphones,
   LayoutDashboard,
+  PanelLeftClose,
+  PanelLeftOpen,
   Settings,
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar tamanho de tela
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Verificar ao inicializar
+    checkScreenSize();
+
+    // Fechar sidebar automaticamente em telas pequenas
+    if (isMobile) {
+      setSidebarOpen(false);
+    } else {
+      setSidebarOpen(true);
+    }
+
+    // Adicionar event listener para redimensionamento
+    window.addEventListener("resize", checkScreenSize);
+
+    // Limpar event listener
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, [isMobile]);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex h-screen bg-white overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-60 border-r border-[#e4e4e7] flex flex-col bg-[#fbfbfb]">
+      <aside
+        className={cn(
+          "border-r border-[#e4e4e7] flex flex-col bg-[#fbfbfb] transition-all duration-300 ease-in-out fixed md:relative z-20 h-full",
+          sidebarOpen ? "w-[280px] max-w-full" : "w-0 overflow-hidden"
+        )}
+        style={{
+          boxShadow:
+            sidebarOpen && isMobile ? "0 0 15px rgba(0,0,0,0.1)" : "none",
+        }}
+      >
         {/* Logo */}
         <div className="pl-6 pr-0 h-16 border-b border-[#e4e4e7] flex items-center">
           <div className="w-[96px] h-[32px] bg-black text-white rounded-md flex items-center justify-center font-medium">
@@ -29,7 +71,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
 
         {/* Filial selector */}
         <div className="p-6 border-b border-[#e4e4e7]">
-          <button className="w-full flex items-center justify-between">
+          <button className="w-full flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-700 font-medium">
                 FA
@@ -47,7 +89,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         <nav className="space-y-1.5 px-4">
           <Link
             href="/dashboard"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
               pathname === "/dashboard"
                 ? "text-white bg-[#102822]"
                 : "text-gray-600 hover:bg-gray-50"
@@ -58,7 +100,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
           </Link>
           <Link
             href="/usuarios"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
               pathname === "/usuarios"
                 ? "text-white bg-[#102822]"
                 : "text-gray-600 hover:bg-gray-50"
@@ -69,7 +111,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
           </Link>
           <Link
             href="/documentos"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
               pathname === "/documentos"
                 ? "text-white bg-[#102822]"
                 : "text-gray-600 hover:bg-gray-50"
@@ -86,7 +128,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         <nav className="space-y-1.5 px-4">
           <Link
             href="/geral"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
               pathname === "/geral"
                 ? "text-white bg-[#102822]"
                 : "text-gray-600 hover:bg-gray-50"
@@ -99,26 +141,49 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
 
         {/* Help */}
         <div className="mt-auto p-6 border-t border-[#e4e4e7]">
-          <div className="flex items-center justify-between text-gray-600">
+          <div className="flex items-center justify-between text-gray-600 hover:text-gray-700 cursor-pointer rounded-lg p-2 hover:bg-gray-50 transition-colors">
             <span>Precisa de ajuda?</span>
             <Headphones className="h-5 w-5" strokeWidth={1.5} />
           </div>
         </div>
       </aside>
 
+      {/* Overlay para fechar sidebar em telas menores */}
+      {sidebarOpen && isMobile && (
+        <div
+          className="fixed inset-0 bg-black/20 z-10 md:hidden cursor-pointer"
+          onClick={toggleSidebar}
+        />
+      )}
+
       {/* Main content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         {/* Header */}
-        <header className="h-16 border-b border-[#e4e4e7] flex items-center justify-end bg-white px-6">
+        <header className="h-16 border-b border-[#e4e4e7] flex items-center justify-between bg-white px-6 z-10">
+          {/* Toggle Sidebar Button */}
+          <button
+            onClick={toggleSidebar}
+            className="flex items-center justify-center h-8 w-8 rounded-md hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer"
+            aria-label={
+              sidebarOpen ? "Fechar menu lateral" : "Abrir menu lateral"
+            }
+          >
+            {sidebarOpen ? (
+              <PanelLeftClose className="h-5 w-5" strokeWidth={1.5} />
+            ) : (
+              <PanelLeftOpen className="h-5 w-5" strokeWidth={1.5} />
+            )}
+          </button>
+
           <div className="flex items-center gap-4">
-            <button className="text-gray-400">
+            <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer h-8 w-8 rounded-full flex items-center justify-center hover:bg-gray-50">
               <Clock className="h-5 w-5" />
             </button>
-            <button className="relative text-gray-400">
+            <button className="relative text-gray-400 hover:text-gray-600 transition-colors cursor-pointer h-8 w-8 rounded-full flex items-center justify-center hover:bg-gray-50">
               <Bell className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full" />
             </button>
-            <div className="h-8 w-8 ml-1 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-700">
+            <div className="h-8 w-8 ml-1 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-200 transition-colors">
               US
             </div>
           </div>
