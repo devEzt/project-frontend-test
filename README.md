@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gerenciador de Usuários
 
-## Getting Started
+![Gerenciador de Usuários](./public/avatars/user-avatar1.jpg)
 
-First, run the development server:
+Este projeto foi desenvolvido como um sistema completo de gerenciamento de usuários, oferecendo uma interface moderna e responsiva para administrar perfis de usuários.
+
+## Visão Geral
+
+O Gerenciador de Usuários é uma aplicação web que permite o cadastro, visualização, edição e exclusão de usuários em diferentes filiais. A interface intuitiva e o design moderno garantem uma experiência de usuário agradável e eficiente.
+
+## Demo
+
+A aplicação está hospedada no Vercel e você pode vê-la em ação [aqui](https://project-frontend-test.vercel.app/usuarios).
+
+## Tecnologias Utilizadas
+
+- **Next.js**: Framework React que oferece renderização híbrida, otimização de imagens e roteamento simplificado.
+- **TypeScript**: Adiciona tipagem estática ao JavaScript, aumentando a segurança e a manutenibilidade do código.
+- **Tailwind CSS**: Framework CSS utilitário que permite criar designs personalizados rapidamente sem sair do seu HTML.
+- **Shadcn/UI**: Biblioteca de componentes acessíveis e reutilizáveis construídos com Radix UI e Tailwind CSS.
+- **Lucide Icons**: Conjunto de ícones SVG limpos e consistentes para a interface do usuário.
+- **React Hook Form**: Biblioteca para gerenciar formulários com facilidade e eficiência.
+- **Radix UI**: Conjunto de componentes primitivos acessíveis e de baixo nível para construir interfaces de usuário.
+
+## Principais Recursos
+
+- Dashboard com estatísticas de usuários
+- Gerenciamento de múltiplas filiais
+- Listagem de usuários com paginação
+- Formulários de cadastro e edição com validação
+- Interface responsiva (desktop e móvel)
+- Avatares personalizados para usuários
+- Sistema de notificações
+
+## Como Rodar o Projeto
+
+### Instalação
+
+Clone o repositório e instale as dependências.
+
+```bash
+git clone https://github.com/SeuUser/gerenciador-usuarios.git
+```
+
+```bash
+cd gerenciador-usuarios
+```
+
+```bash
+npm install
+```
+
+### Desenvolvimento
+
+Para iniciar o servidor de desenvolvimento.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) para visualizá-lo no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Produção
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Para criar uma build de produção.
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Para iniciar a versão de produção:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estrutura do Projeto
 
-## Deploy on Vercel
+O projeto segue uma arquitetura bem organizada para facilitar a manutenção:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/app`: Páginas e rotas da aplicação usando o App Router do Next.js
+- `/components`: Componentes reutilizáveis da interface
+- `/components/ui`: Componentes base do Shadcn UI
+- `/lib`: Utilitários e funções auxiliares
+- `/data`: Dados e serviços para a aplicação
+- `/public`: Arquivos estáticos, incluindo avatares de usuários
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Licença
+
+MIT
+
+---
+
+Feito por Alexandre Maciel www.github.com/devezt.
