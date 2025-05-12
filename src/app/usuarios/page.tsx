@@ -1,7 +1,7 @@
 "use client";
 
 import { UserList, Usuario } from "@/components/usuarios/user-list";
-import { useState, useRef, useContext, createContext, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Sheet,
   SheetClose,
@@ -10,16 +10,7 @@ import {
 } from "@/components/ui/drawer";
 import { Toast } from "@/components/ui/toast";
 import { filialsMockData } from "@/data/mocks";
-
-const FilialContext = createContext<{
-  filialAtual: number;
-  setFilialAtual: React.Dispatch<React.SetStateAction<number>>;
-}>({
-  filialAtual: 0,
-  setFilialAtual: () => {},
-});
-
-export const useFilial = () => useContext(FilialContext);
+import { FilialContext, useFilial } from "@/lib/hooks/use-filial";
 
 export default function UsuariosPage() {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);

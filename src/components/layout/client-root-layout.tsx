@@ -3,6 +3,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   Bell,
   ChevronDown,
@@ -463,9 +464,11 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
                 className="h-10 w-10 rounded-full overflow-hidden cursor-pointer hover:opacity-90 transition-colors border-2 border-transparent hover:border-gray-200"
                 aria-label="Menu do usuário"
               >
-                <img
+                <Image
                   src="https://randomuser.me/api/portraits/men/32.jpg"
                   alt="Perfil do usuário"
+                  width={40}
+                  height={40}
                   className="h-full w-full object-cover"
                 />
               </button>
@@ -475,9 +478,11 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
                   <div className="p-3 border-b border-gray-100">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-full overflow-hidden">
-                        <img
+                        <Image
                           src="https://randomuser.me/api/portraits/men/32.jpg"
                           alt="Perfil do usuário"
+                          width={40}
+                          height={40}
                           className="h-full w-full object-cover"
                         />
                       </div>
