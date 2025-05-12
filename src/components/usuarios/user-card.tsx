@@ -25,7 +25,6 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
   const [expanded, setExpanded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Função para fechar o menu quando clicar fora dele
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -51,23 +50,18 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
 
   const confirmDelete = () => {
     setConfirmOpen(false);
-    // Lógica para excluir
-    console.log("Usuário excluído:", usuario.id);
-    // Mostrar o toast
     setToastVisible(true);
     setTimeout(() => {
       setToastVisible(false);
     }, 3000);
   };
 
-  // Função para alternar a exibição expandida no mobile
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 flex flex-col sm:flex-row sm:items-center overflow-hidden">
-      {/* Conteúdo principal do card - sempre visível */}
       <div className="flex flex-1 items-center p-3 sm:p-4">
         <div className="h-[45px] w-[45px] sm:h-[56px] sm:w-[56px] bg-gray-100 rounded-full flex items-center justify-center text-gray-700 font-medium text-base mr-3">
           {usuario.id}
@@ -129,7 +123,6 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
             {usuario.status}
           </span>
 
-          {/* Botão para expandir em telas pequenas */}
           <button
             onClick={toggleExpanded}
             className="sm:hidden text-gray-400 hover:text-gray-600 transition-colors"
@@ -178,7 +171,6 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
         </div>
       </div>
 
-      {/* Seção detalhada para mobile - visível apenas quando expandido */}
       {expanded && (
         <div className="sm:hidden border-t border-gray-100 bg-gray-50 p-3">
           <div className="grid grid-cols-2 gap-2 text-[12px] text-gray-500">
@@ -227,16 +219,13 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
         </div>
       )}
 
-      {/* Modal de confirmação de exclusão */}
       {confirmOpen && (
         <>
-          {/* Overlay escuro */}
           <div
             className="fixed inset-0 bg-black/50 z-50"
             onClick={() => setConfirmOpen(false)}
           />
 
-          {/* Modal */}
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-md overflow-hidden">
               <div className="flex justify-between items-center p-4 border-b">
@@ -279,7 +268,6 @@ export function UserCard({ usuario, onEdit }: UserCardProps) {
         </>
       )}
 
-      {/* Toast de confirmação */}
       {toastVisible && (
         <div className="fixed bottom-4 right-4 bg-green-100 border border-green-200 text-green-800 rounded-lg shadow-md p-4 flex items-center justify-between z-50 w-80 max-w-[90vw]">
           <div className="flex items-center gap-2">

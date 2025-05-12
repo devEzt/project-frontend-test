@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UserCard } from "./user-card";
-import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -129,6 +129,8 @@ interface UserListProps {
 export function UserList({ onEditUsuario }: UserListProps) {
   const [usuarios] = useState<Usuario[]>(mockUsuarios);
   const [filtersVisible, setFiltersVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const totalUsuarios = "294";
   const usuariosAtivos = "203";
@@ -137,6 +139,49 @@ export function UserList({ onEditUsuario }: UserListProps) {
 
   const toggleFilters = () => {
     setFiltersVisible(!filtersVisible);
+  };
+
+  const totalPages = Math.ceil(parseInt(totalUsuarios) / itemsPerPage);
+
+  const paginationItems = () => {
+    const items = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        items.push(i);
+      }
+    } else {
+      items.push(1);
+
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+      if (startPage > 2) {
+        items.push("ellipsis");
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        items.push(i);
+      }
+
+      if (endPage < totalPages - 1) {
+        items.push("ellipsis");
+      }
+
+      items.push(totalPages);
+    }
+
+    return items;
+  };
+
+  const changePage = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const changeItemsPerPage = (value: string) => {
+    setItemsPerPage(parseInt(value));
+    setCurrentPage(1);
   };
 
   return (
@@ -186,7 +231,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
             onClick={toggleFilters}
             className="bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50"
           >
-            <Filter className="h-5 w-5 text-gray-500" strokeWidth={1.5} />
+            <ListFilter className="h-5 w-5 text-gray-500" strokeWidth={1.5} />
           </Button>
         </div>
 
@@ -201,7 +246,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
                   <SelectTrigger className="w-full border border-gray-200 rounded">
                     <SelectValue placeholder="Todos" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white">
                     <SelectItem value="todos">Todos</SelectItem>
                     <SelectItem value="ativo">Ativo</SelectItem>
                     <SelectItem value="inativo">Inativo</SelectItem>
@@ -216,7 +261,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
                   <SelectTrigger className="w-full border border-gray-200 rounded">
                     <SelectValue placeholder="Todos" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white">
                     <SelectItem value="todos">Todos</SelectItem>
                     <SelectItem value="homem">Homem</SelectItem>
                     <SelectItem value="mulher">Mulher</SelectItem>
@@ -229,7 +274,7 @@ export function UserList({ onEditUsuario }: UserListProps) {
                   <SelectTrigger className="w-full border border-gray-200 rounded">
                     <SelectValue placeholder="Todos" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white">
                     <SelectItem value="todos">Todos</SelectItem>
                     <SelectItem value="padrao">Usuário padrão</SelectItem>
                   </SelectContent>
@@ -260,39 +305,48 @@ export function UserList({ onEditUsuario }: UserListProps) {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-5 px-4 sm:px-10 font-sans gap-4">
         <span className="text-[14px] text-gray-500 order-3 sm:order-1 text-center sm:text-left">
-          5 de 294 itens
+          {itemsPerPage} de {totalUsuarios} itens
         </span>
 
         <div className="flex items-center justify-center gap-1 order-1 sm:order-2">
           <Button
             variant="ghost"
             className="px-2 sm:px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
+            onClick={() => currentPage > 1 && changePage(currentPage - 1)}
+            disabled={currentPage === 1}
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             <span className="hidden sm:inline">Anterior</span>
           </Button>
-          <Button
-            variant="default"
-            className="min-w-6 h-6 flex items-center justify-center text-[14px] bg-primary text-white rounded px-2 cursor-pointer"
-          >
-            1
-          </Button>
-          <Button
-            variant="ghost"
-            className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded"
-          >
-            2
-          </Button>
-          <span className="text-gray-500">...</span>
-          <Button
-            variant="ghost"
-            className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded"
-          >
-            58
-          </Button>
+
+          {paginationItems().map((item, index) =>
+            item === "ellipsis" ? (
+              <span key={`ellipsis-${index}`} className="text-gray-500">
+                ...
+              </span>
+            ) : (
+              <Button
+                key={`page-${item}`}
+                variant={currentPage === item ? "default" : "ghost"}
+                className={`min-w-6 h-6 flex items-center justify-center text-[14px] ${
+                  currentPage === item
+                    ? "bg-primary text-white"
+                    : "text-gray-500 hover:bg-gray-50"
+                } rounded px-2 cursor-pointer transition-colors`}
+                onClick={() => changePage(Number(item))}
+              >
+                {item}
+              </Button>
+            )
+          )}
+
           <Button
             variant="ghost"
             className="px-2 sm:px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
+            onClick={() =>
+              currentPage < totalPages && changePage(currentPage + 1)
+            }
+            disabled={currentPage === totalPages}
           >
             <span className="hidden sm:inline">Próxima</span>
             <ChevronRight className="h-4 w-4 ml-1" />
@@ -301,14 +355,17 @@ export function UserList({ onEditUsuario }: UserListProps) {
 
         <div className="flex items-center justify-center sm:justify-end gap-2 order-2 sm:order-3">
           <span className="text-[14px] text-gray-500">Itens por página:</span>
-          <Select defaultValue="10">
+          <Select
+            value={itemsPerPage.toString()}
+            onValueChange={changeItemsPerPage}
+          >
             <SelectTrigger className="w-[70px] border border-gray-200 rounded px-2 py-1 h-auto">
-              <SelectValue placeholder="10" />
+              <SelectValue placeholder={itemsPerPage.toString()} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white">
+              <SelectItem value="5">5</SelectItem>
               <SelectItem value="10">10</SelectItem>
               <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
             </SelectContent>
           </Select>
         </div>

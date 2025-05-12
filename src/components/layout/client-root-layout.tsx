@@ -91,10 +91,19 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
             sidebarOpen && isMobile ? "0 0 15px rgba(0,0,0,0.1)" : "none",
         }}
       >
-        <div className="pl-6 pr-0 h-16 border-b border-[#e4e4e7] flex items-center">
+        <div className="pl-6 pr-4 h-16 border-b border-[#e4e4e7] flex items-center justify-between">
           <div className="w-[96px] h-[32px] bg-black text-white rounded-md flex items-center justify-center font-medium">
             Logo
           </div>
+          {isMobile && (
+            <button
+              onClick={toggleSidebar}
+              className="md:hidden flex items-center justify-center h-8 w-8 rounded-md hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer"
+              aria-label="Fechar menu lateral"
+            >
+              <X className="h-5 w-5" strokeWidth={1.5} />
+            </button>
+          )}
         </div>
 
         <div className="p-6 border-b border-[#e4e4e7]">

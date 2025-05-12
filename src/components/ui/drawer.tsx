@@ -6,14 +6,14 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-white p-6 shadow-lg transition-all duration-500 ease-in-out",
+  "fixed z-50 bg-white shadow-lg transition-all duration-300 ease-in-out max-w-full",
   {
     variants: {
       side: {
-        top: "inset-x-0 top-0 border-b",
-        bottom: "inset-x-0 bottom-0 border-t",
-        left: "inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
-        right: "inset-y-0 right-0 h-full border-l",
+        top: "inset-x-0 top-0 border-b p-6",
+        bottom: "inset-x-0 bottom-0 border-t rounded-t-[10px] w-full",
+        left: "inset-y-0 left-0 h-full border-r p-6",
+        right: "inset-y-0 right-0 h-full border-l p-6",
       },
     },
     defaultVariants: {
@@ -49,17 +49,8 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
       <>
         {isOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-500 ease-in-out"
+            className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ease-in-out"
             onClick={() => handleOpenChange(false)}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              width: "100vw",
-              height: "100vh",
-            }}
           />
         )}
         <div
@@ -68,11 +59,17 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
           {...props}
           style={{
             transform: isOpen
-              ? "translateX(0)"
+              ? side === "bottom" || side === "top"
+                ? "translateY(0)"
+                : "translateX(0)"
+              : side === "bottom"
+              ? "translateY(100%)"
+              : side === "top"
+              ? "translateY(-100%)"
               : side === "right"
               ? "translateX(100%)"
               : "translateX(-100%)",
-            transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
             ...props.style,
           }}
         >

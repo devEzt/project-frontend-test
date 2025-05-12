@@ -34,12 +34,8 @@ export default function UsuariosPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Aqui você implementaria a lógica para adicionar ou salvar o usuário
-
-    // Fecha o drawer
     handleCloseDrawer();
 
-    // Mostra o toast com a mensagem apropriada
     if (usuarioEmEdicao) {
       setToastMessage("Usuário editado com sucesso!");
     } else {
@@ -48,10 +44,9 @@ export default function UsuariosPage() {
 
     setToastOpen(true);
 
-    // Fecha o toast após 4 segundos
     setTimeout(() => {
       setToastOpen(false);
-    }, 4000);
+    }, 5000);
   };
 
   return (
