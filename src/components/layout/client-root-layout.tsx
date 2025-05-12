@@ -28,30 +28,24 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const helpRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
 
-  // Detectar tamanho de tela
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Verificar ao inicializar
     checkScreenSize();
 
-    // Fechar sidebar automaticamente em telas pequenas
     if (isMobile) {
       setSidebarOpen(false);
     } else {
       setSidebarOpen(true);
     }
 
-    // Adicionar event listener para redimensionamento
     window.addEventListener("resize", checkScreenSize);
 
-    // Limpar event listener
     return () => window.removeEventListener("resize", checkScreenSize);
   }, [isMobile]);
 
-  // Fechar dropdowns ao clicar fora deles
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (helpRef.current && !helpRef.current.contains(event.target as Node)) {
@@ -87,7 +81,6 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-white overflow-hidden">
-      {/* Sidebar */}
       <aside
         className={cn(
           "border-r border-[#e4e4e7] flex flex-col bg-[#fbfbfb] transition-all duration-300 ease-in-out fixed md:relative z-20 h-full",
@@ -98,14 +91,12 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
             sidebarOpen && isMobile ? "0 0 15px rgba(0,0,0,0.1)" : "none",
         }}
       >
-        {/* Logo */}
         <div className="pl-6 pr-0 h-16 border-b border-[#e4e4e7] flex items-center">
           <div className="w-[96px] h-[32px] bg-black text-white rounded-md flex items-center justify-center font-medium">
             Logo
           </div>
         </div>
 
-        {/* Filial selector */}
         <div className="p-6 border-b border-[#e4e4e7]">
           <button className="w-full flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
             <div className="flex items-center gap-3">
@@ -118,7 +109,6 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
           </button>
         </div>
 
-        {/* Menu */}
         <div className="px-6 pt-6 pb-3">
           <div className="text-sm text-gray-500 font-normal">Menu</div>
         </div>
@@ -175,7 +165,6 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
           </Link>
         </nav>
 
-        {/* Help */}
         <div className="mt-auto p-6 border-t border-[#e4e4e7]">
           <div className="flex items-center justify-between text-gray-600 hover:text-gray-700 cursor-pointer rounded-lg p-2 hover:bg-gray-50 transition-colors">
             <span>Precisa de ajuda?</span>
@@ -184,7 +173,6 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Overlay para fechar sidebar em telas menores */}
       {sidebarOpen && isMobile && (
         <div
           className="fixed inset-0 bg-black/20 z-10 md:hidden cursor-pointer"
@@ -192,11 +180,8 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col w-full">
-        {/* Header */}
         <header className="h-16 border-b border-[#e4e4e7] flex items-center justify-between bg-white px-6 z-10">
-          {/* Toggle Sidebar Button */}
           <button
             onClick={toggleSidebar}
             className="flex items-center justify-center h-8 w-8 rounded-md hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer"
@@ -358,7 +343,6 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        {/* Page content */}
         <main className="flex-1 overflow-auto p-0">{children}</main>
       </div>
     </div>

@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { UserCard } from "./user-card";
-import { ListFilter } from "lucide-react";
+import { ListFilter, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Usuario {
   id: string;
@@ -119,38 +128,21 @@ export function UserList() {
       <div className="relative mb-5 px-10 flex items-center">
         <div className="relative flex-1">
           <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400">
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 17 17"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7.79167 13.4583C10.9213 13.4583 13.4583 10.9213 13.4583 7.79167C13.4583 4.66205 10.9213 2.125 7.79167 2.125C4.66205 2.125 2.125 4.66205 2.125 7.79167C2.125 10.9213 4.66205 13.4583 7.79167 13.4583Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M14.875 14.875L11.7938 11.7938"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Search size={17} />
           </div>
-          <input
+          <Input
             type="text"
             placeholder="Buscar..."
             className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none text-sm font-sans"
           />
         </div>
-        <button className="ml-3 bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors">
+        <Button
+          variant="outline"
+          size="icon"
+          className="ml-3 bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50"
+        >
           <ListFilter className="h-5 w-5 text-gray-500" strokeWidth={1.5} />
-        </button>
+        </Button>
       </div>
 
       {/* Lista de usuários em cards */}
@@ -165,63 +157,53 @@ export function UserList() {
         <span className="text-[14px] text-gray-500">5 de 294 itens</span>
 
         <div className="flex items-center gap-1">
-          <button className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-1"
-            >
-              <path
-                d="M9.5 11L6.5 8L9.5 5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <Button
+            variant="ghost"
+            className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
             Anterior
-          </button>
-          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] bg-primary text-white rounded px-2 cursor-pointer">
+          </Button>
+          <Button
+            variant="default"
+            className="min-w-6 h-6 flex items-center justify-center text-[14px] bg-primary text-white rounded px-2 cursor-pointer"
+          >
             1
-          </button>
-          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded">
+          </Button>
+          <Button
+            variant="ghost"
+            className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded"
+          >
             2
-          </button>
+          </Button>
           <span className="text-gray-500">...</span>
-          <button className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded">
+          <Button
+            variant="ghost"
+            className="min-w-6 h-6 flex items-center justify-center text-[14px] text-gray-500 px-2 hover:bg-gray-50 cursor-pointer transition-colors rounded"
+          >
             58
-          </button>
-          <button className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded">
+          </Button>
+          <Button
+            variant="ghost"
+            className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
+          >
             Próxima
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="ml-1"
-            >
-              <path
-                d="M6.5 11L9.5 8L6.5 5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="text-[14px] text-gray-500">Itens por página:</span>
-          <select className="border border-gray-200 rounded px-2 py-1 text-[14px] cursor-pointer">
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-          </select>
+          <Select defaultValue="10">
+            <SelectTrigger className="w-[70px] border border-gray-200 rounded px-2 py-1 h-auto">
+              <SelectValue placeholder="10" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

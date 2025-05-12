@@ -43,14 +43,12 @@ export function Sidebar() {
 
   return (
     <div className="min-w-64 h-screen border-r border-[#e4e4e7] bg-[#fbfbfb] flex flex-col">
-      {/* Logo */}
       <div className="p-4 border-b border-[#e4e4e7]">
         <Button variant="ghost" className="font-bold text-xl p-2 text-black">
           Logo
         </Button>
       </div>
 
-      {/* Usuário logado */}
       <div className="p-4">
         <div className="flex items-center gap-2">
           <div className="font-medium">FA</div>
@@ -58,7 +56,6 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Menu */}
       <div className="px-2 py-2">
         <div className="text-xs text-muted-foreground px-4 py-2">Menu</div>
         <div className="space-y-1">
@@ -82,7 +79,6 @@ export function Sidebar() {
 
       <Separator className="my-2" />
 
-      {/* Configurações */}
       <div className="px-2 py-2">
         <div className="text-xs text-muted-foreground px-4 py-2">
           Configurações

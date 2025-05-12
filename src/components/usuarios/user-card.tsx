@@ -1,5 +1,6 @@
 import React from "react";
 import { Tag, User, Calendar, Clock, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Usuario {
   id: string;
@@ -60,9 +61,13 @@ export function UserCard({ usuario }: { usuario: Usuario }) {
         >
           {usuario.status}
         </span>
-        <button className="text-gray-400 hover:text-gray-600 cursor-pointer transition-colors rounded-full h-8 w-8 flex items-center justify-center hover:bg-gray-50">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-gray-400 hover:text-gray-600 cursor-pointer transition-colors rounded-full h-8 w-8 flex items-center justify-center hover:bg-gray-50 p-0"
+        >
           <MoreHorizontal size={20} strokeWidth={1.5} />
-        </button>
+        </Button>
       </div>
     </div>
   );
