@@ -10,19 +10,14 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Usuario } from "./user-list";
 
-interface Usuario {
-  id: string;
-  nome: string;
-  idade: number;
-  genero: string;
-  dataRegistro: string;
-  tempoSessao: string;
-  status: "Ativo" | "Inativo";
-  tipo?: string;
+interface UserCardProps {
+  usuario: Usuario;
+  onEdit: () => void;
 }
 
-export function UserCard({ usuario }: { usuario: Usuario }) {
+export function UserCard({ usuario, onEdit }: UserCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
@@ -44,8 +39,7 @@ export function UserCard({ usuario }: { usuario: Usuario }) {
 
   const handleEdit = () => {
     setMenuOpen(false);
-    // Lógica para editar
-    console.log("Editar usuário:", usuario.id);
+    onEdit();
   };
 
   const handleDelete = () => {

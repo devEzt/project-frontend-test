@@ -1,6 +1,6 @@
 "use client";
 
-import { UserList } from "@/components/usuarios/user-list";
+import { UserList, Usuario } from "@/components/usuarios/user-list";
 import { useState } from "react";
 import {
   Sheet,
@@ -11,6 +11,21 @@ import {
 
 export default function UsuariosPage() {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
+
+  const handleOpenDrawer = (usuario?: Usuario) => {
+    if (usuario) {
+      setUsuarioEmEdicao(usuario);
+    } else {
+      setUsuarioEmEdicao(null);
+    }
+    setIsAddUserOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsAddUserOpen(false);
+    setUsuarioEmEdicao(null);
+  };
 
   return (
     <div className="space-y-5 py-6">
@@ -19,24 +34,26 @@ export default function UsuariosPage() {
           Usuários
         </h1>
         <button
-          onClick={() => setIsAddUserOpen(true)}
+          onClick={() => handleOpenDrawer()}
           className="bg-[#102822] hover:bg-[#102822]/90 text-white h-[40px] w-[117px] rounded-full flex items-center justify-center gap-1 text-sm shadow-sm cursor-pointer transition-colors"
         >
           <span className="text-lg font-normal leading-none">+</span>
           <span>Adicionar</span>
         </button>
       </div>
-      <UserList />
+      <UserList onEditUsuario={(usuario) => handleOpenDrawer(usuario)} />
 
       <Sheet
         open={isAddUserOpen}
-        onOpenChange={setIsAddUserOpen}
+        onOpenChange={handleCloseDrawer}
         side="right"
         className="w-[560px] h-screen p-6 overflow-y-auto"
       >
-        <SheetClose onClick={() => setIsAddUserOpen(false)} />
+        <SheetClose onClick={handleCloseDrawer} />
         <SheetHeader>
-          <SheetTitle>Adicionar usuário</SheetTitle>
+          <SheetTitle>
+            {usuarioEmEdicao ? "Editar usuário" : "Adicionar usuário"}
+          </SheetTitle>
         </SheetHeader>
 
         <div className="mt-6 space-y-6">
@@ -51,6 +68,7 @@ export default function UsuariosPage() {
               type="text"
               id="nome"
               placeholder="Digite o nome"
+              defaultValue={usuarioEmEdicao?.nome || ""}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
             />
           </div>
@@ -66,6 +84,7 @@ export default function UsuariosPage() {
               type="email"
               id="email"
               placeholder="Digite o e-mail"
+              defaultValue={usuarioEmEdicao?.email || ""}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
             />
           </div>
@@ -81,6 +100,7 @@ export default function UsuariosPage() {
               type="tel"
               id="telefone"
               placeholder="Informe o telefone"
+              defaultValue={usuarioEmEdicao?.telefone || ""}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
             />
           </div>
@@ -89,6 +109,7 @@ export default function UsuariosPage() {
             <input
               type="checkbox"
               id="whatsapp"
+              defaultChecked={usuarioEmEdicao?.whatsapp || false}
               className="h-5 w-5 text-[#102822] focus:ring-[#102822] border-gray-300 rounded cursor-pointer"
             />
             <label
@@ -111,6 +132,7 @@ export default function UsuariosPage() {
                 type="text"
                 id="cpf"
                 placeholder="Informe o CPF"
+                defaultValue={usuarioEmEdicao?.cpf || ""}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
               />
             </div>
@@ -125,6 +147,7 @@ export default function UsuariosPage() {
                 type="text"
                 id="rg"
                 placeholder="Informe o RG"
+                defaultValue={usuarioEmEdicao?.rg || ""}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
               />
             </div>
@@ -162,7 +185,11 @@ export default function UsuariosPage() {
                     name="status"
                     id="status"
                     className="sr-only peer cursor-pointer"
-                    defaultChecked
+                    defaultChecked={
+                      usuarioEmEdicao
+                        ? usuarioEmEdicao.status === "Ativo"
+                        : true
+                    }
                   />
                   <div className="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#102822] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all cursor-pointer"></div>
                 </div>
@@ -174,7 +201,7 @@ export default function UsuariosPage() {
           <div className="pt-5 flex justify-end space-x-3 mt-auto pb-6">
             <button
               type="button"
-              onClick={() => setIsAddUserOpen(false)}
+              onClick={handleCloseDrawer}
               className="px-5 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors"
             >
               Cancelar
@@ -183,7 +210,7 @@ export default function UsuariosPage() {
               type="submit"
               className="px-5 py-2 bg-[#102822] text-white rounded-full text-sm font-medium hover:bg-[#102822]/90 cursor-pointer transition-colors"
             >
-              Adicionar
+              {usuarioEmEdicao ? "Salvar" : "Adicionar"}
             </button>
           </div>
         </div>
