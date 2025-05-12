@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UserCard } from "./user-card";
-import { ListFilter, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -128,60 +128,127 @@ interface UserListProps {
 
 export function UserList({ onEditUsuario }: UserListProps) {
   const [usuarios] = useState<Usuario[]>(mockUsuarios);
+  const [filtersVisible, setFiltersVisible] = useState(false);
 
   const totalUsuarios = "294";
   const usuariosAtivos = "203";
   const usuariosInativos = "127";
   const tempoMedioSessao = "31m 20s";
 
+  const toggleFilters = () => {
+    setFiltersVisible(!filtersVisible);
+  };
+
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-10">
-        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 px-4 sm:px-10">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-3 sm:p-4 flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Usuários</p>
-          <p className="text-[30px] font-normal font-serif">{totalUsuarios}</p>
-        </div>
-        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
-          <p className="text-xs text-gray-500 mb-1 font-sans">
-            Tempo de sessão
+          <p className="text-[22px] sm:text-[30px] font-normal font-serif">
+            {totalUsuarios}
           </p>
-          <p className="text-[30px] font-normal font-serif">
+        </div>
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-3 sm:p-4 flex flex-col justify-center">
+          <p className="text-xs text-gray-500 mb-1 font-sans">Tempo</p>
+          <p className="text-[22px] sm:text-[30px] font-normal font-serif">
             {tempoMedioSessao}
           </p>
         </div>
-        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-3 sm:p-4 flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Ativos</p>
-          <p className="text-[30px] font-normal font-serif">{usuariosAtivos}</p>
+          <p className="text-[22px] sm:text-[30px] font-normal font-serif">
+            {usuariosAtivos}
+          </p>
         </div>
-        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-3 sm:p-4 flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Inativos</p>
-          <p className="text-[30px] font-normal font-serif">
+          <p className="text-[22px] sm:text-[30px] font-normal font-serif">
             {usuariosInativos}
           </p>
         </div>
       </div>
 
-      <div className="relative mb-5 px-10 flex items-center">
-        <div className="relative flex-1">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400">
-            <Search size={17} />
+      <div className="relative mb-5 px-4 sm:px-10">
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400">
+              <Search size={17} />
+            </div>
+            <Input
+              type="text"
+              placeholder="Buscar..."
+              className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none text-sm font-sans"
+            />
           </div>
-          <Input
-            type="text"
-            placeholder="Buscar..."
-            className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none text-sm font-sans"
-          />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={toggleFilters}
+            className="bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50"
+          >
+            <Filter className="h-5 w-5 text-gray-500" strokeWidth={1.5} />
+          </Button>
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          className="ml-3 bg-white h-[40px] w-[40px] rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50"
-        >
-          <ListFilter className="h-5 w-5 text-gray-500" strokeWidth={1.5} />
-        </Button>
+
+        {filtersVisible && (
+          <div className="mt-3 p-3 bg-white border border-gray-100 rounded-lg shadow-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">
+                  Status
+                </label>
+                <Select defaultValue="todos">
+                  <SelectTrigger className="w-full border border-gray-200 rounded">
+                    <SelectValue placeholder="Todos" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="ativo">Ativo</SelectItem>
+                    <SelectItem value="inativo">Inativo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">
+                  Gênero
+                </label>
+                <Select defaultValue="todos">
+                  <SelectTrigger className="w-full border border-gray-200 rounded">
+                    <SelectValue placeholder="Todos" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="homem">Homem</SelectItem>
+                    <SelectItem value="mulher">Mulher</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 mb-1 block">Tipo</label>
+                <Select defaultValue="todos">
+                  <SelectTrigger className="w-full border border-gray-200 rounded">
+                    <SelectValue placeholder="Todos" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="padrao">Usuário padrão</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex justify-end mt-3 gap-2">
+              <Button variant="outline" size="sm" className="h-8 bg-white">
+                Limpar
+              </Button>
+              <Button size="sm" className="h-8">
+                Aplicar
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="space-y-2 px-10 font-sans">
+      <div className="space-y-2 px-4 sm:px-10 font-sans">
         {usuarios.map((usuario) => (
           <UserCard
             key={usuario.id}
@@ -191,16 +258,18 @@ export function UserList({ onEditUsuario }: UserListProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-between mt-5 px-10 font-sans">
-        <span className="text-[14px] text-gray-500">5 de 294 itens</span>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-5 px-4 sm:px-10 font-sans gap-4">
+        <span className="text-[14px] text-gray-500 order-3 sm:order-1 text-center sm:text-left">
+          5 de 294 itens
+        </span>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center justify-center gap-1 order-1 sm:order-2">
           <Button
             variant="ghost"
-            className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
+            className="px-2 sm:px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Anterior
+            <span className="hidden sm:inline">Anterior</span>
           </Button>
           <Button
             variant="default"
@@ -223,14 +292,14 @@ export function UserList({ onEditUsuario }: UserListProps) {
           </Button>
           <Button
             variant="ghost"
-            className="px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
+            className="px-2 sm:px-3 py-1 text-[14px] text-gray-500 flex items-center hover:bg-gray-50 cursor-pointer transition-colors rounded h-auto"
           >
-            Próxima
+            <span className="hidden sm:inline">Próxima</span>
             <ChevronRight className="h-4 w-4 ml-1" />
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center sm:justify-end gap-2 order-2 sm:order-3">
           <span className="text-[14px] text-gray-500">Itens por página:</span>
           <Select defaultValue="10">
             <SelectTrigger className="w-[70px] border border-gray-200 rounded px-2 py-1 h-auto">

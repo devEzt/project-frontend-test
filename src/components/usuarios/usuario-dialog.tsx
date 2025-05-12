@@ -115,9 +115,9 @@ export function UsuarioDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="max-w-[95vw] sm:max-w-[425px] p-4 sm:p-6 rounded-lg">
+        <DialogHeader className="mb-4">
+          <DialogTitle className="text-center sm:text-left">
             {usuario ? "Editar usuário" : "Adicionar usuário"}
           </DialogTitle>
         </DialogHeader>
@@ -135,6 +135,7 @@ export function UsuarioDialog({
                       placeholder="ID (ex: JG)"
                       {...field}
                       disabled={!!usuario}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormMessage />
@@ -149,25 +150,10 @@ export function UsuarioDialog({
                 <FormItem>
                   <FormLabel>Nome completo</FormLabel>
                   <FormControl>
-                    <Input placeholder="João da Silva" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="idade"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Idade</FormLabel>
-                  <FormControl>
                     <Input
-                      type="number"
-                      placeholder="30"
+                      placeholder="João da Silva"
                       {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,31 +161,55 @@ export function UsuarioDialog({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="genero"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gênero</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="idade"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Idade</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o gênero" />
-                      </SelectTrigger>
+                      <Input
+                        type="number"
+                        placeholder="30"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value))
+                        }
+                        className="w-full"
+                      />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Homem">Homem</SelectItem>
-                      <SelectItem value="Mulher">Mulher</SelectItem>
-                      <SelectItem value="Outro">Outro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="genero"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gênero</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecione o gênero" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Homem">Homem</SelectItem>
+                        <SelectItem value="Mulher">Mulher</SelectItem>
+                        <SelectItem value="Outro">Outro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -212,7 +222,7 @@ export function UsuarioDialog({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione o status" />
                       </SelectTrigger>
                     </FormControl>
@@ -226,15 +236,21 @@ export function UsuarioDialog({
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0 pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                className="w-full sm:w-auto order-2 sm:order-1"
               >
                 Cancelar
               </Button>
-              <Button type="submit">Salvar</Button>
+              <Button
+                type="submit"
+                className="w-full sm:w-auto order-1 sm:order-2"
+              >
+                Salvar
+              </Button>
             </DialogFooter>
           </form>
         </Form>
