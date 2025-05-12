@@ -330,9 +330,9 @@ export function UserList({ onEditUsuario }: UserListProps) {
                 variant={currentPage === item ? "default" : "ghost"}
                 className={`min-w-6 h-6 flex items-center justify-center text-[14px] ${
                   currentPage === item
-                    ? "bg-primary text-white"
+                    ? "bg-white text-gray-700 border border-gray-200 shadow-sm"
                     : "text-gray-500 hover:bg-gray-50"
-                } rounded px-2 cursor-pointer transition-colors`}
+                } rounded-md px-2 cursor-pointer transition-colors`}
                 onClick={() => changePage(Number(item))}
               >
                 {item}
