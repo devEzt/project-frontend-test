@@ -465,7 +465,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
                 aria-label="Menu do usuário"
               >
                 <Image
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  src="/avatars/user-avatar1.jpg"
                   alt="Perfil do usuário"
                   width={40}
                   height={40}
@@ -479,7 +479,7 @@ export function ClientRootLayout({ children }: { children: React.ReactNode }) {
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-full overflow-hidden">
                         <Image
-                          src="https://randomuser.me/api/portraits/men/32.jpg"
+                          src="/avatars/user-avatar1.jpg"
                           alt="Perfil do usuário"
                           width={40}
                           height={40}
