@@ -91,11 +91,11 @@ export function UserList() {
     <div className="space-y-5">
       {/* Cards de métricas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-10">
-        <div className="bg-[#FAFAFA] rounded-lg border border-gray-200 p-4 h-[100px] flex flex-col justify-center">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Usuários</p>
           <p className="text-[30px] font-normal font-serif">{totalUsuarios}</p>
         </div>
-        <div className="bg-[#FAFAFA] rounded-lg border border-gray-200 p-4 h-[100px] flex flex-col justify-center">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">
             Tempo de sessão
           </p>
@@ -103,11 +103,11 @@ export function UserList() {
             {tempoMedioSessao}
           </p>
         </div>
-        <div className="bg-[#FAFAFA] rounded-lg border border-gray-200 p-4 h-[100px] flex flex-col justify-center">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Ativos</p>
           <p className="text-[30px] font-normal font-serif">{usuariosAtivos}</p>
         </div>
-        <div className="bg-[#FAFAFA] rounded-lg border border-gray-200 p-4 h-[100px] flex flex-col justify-center">
+        <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Inativos</p>
           <p className="text-[30px] font-normal font-serif">
             {usuariosInativos}
