@@ -90,15 +90,13 @@ const mockUsuarios: Usuario[] = [
 export function UserList() {
   const [usuarios] = useState<Usuario[]>(mockUsuarios);
 
-  // Métricas
-  const totalUsuarios = "294"; // Número fixo para corresponder à imagem
+  const totalUsuarios = "294";
   const usuariosAtivos = "203";
   const usuariosInativos = "127";
   const tempoMedioSessao = "31m 20s";
 
   return (
     <div className="space-y-5">
-      {/* Cards de métricas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-10">
         <div className="bg-[#FAFAFA] rounded-lg shadow-sm p-4 h-[100px] flex flex-col justify-center">
           <p className="text-xs text-gray-500 mb-1 font-sans">Usuários</p>
@@ -124,7 +122,6 @@ export function UserList() {
         </div>
       </div>
 
-      {/* Barra de busca */}
       <div className="relative mb-5 px-10 flex items-center">
         <div className="relative flex-1">
           <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400">
@@ -145,14 +142,12 @@ export function UserList() {
         </Button>
       </div>
 
-      {/* Lista de usuários em cards */}
       <div className="space-y-2 px-10 font-sans">
         {usuarios.map((usuario) => (
           <UserCard key={usuario.id} usuario={usuario} />
         ))}
       </div>
 
-      {/* Paginação */}
       <div className="flex items-center justify-between mt-5 px-10 font-sans">
         <span className="text-[14px] text-gray-500">5 de 294 itens</span>
 

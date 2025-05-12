@@ -29,7 +29,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Tipos para o componente
 interface Usuario {
   id: string;
   nome: string;
@@ -47,7 +46,6 @@ interface UsuarioDialogProps {
   onSave: (usuario: Usuario) => void;
 }
 
-// Schema de validação
 const usuarioSchema = z.object({
   id: z.string().min(2, "ID deve ter pelo menos 2 caracteres"),
   nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
@@ -67,7 +65,6 @@ export function UsuarioDialog({
   usuario,
   onSave,
 }: UsuarioDialogProps) {
-  // Definir form com validação
   const form = useForm<UsuarioFormValues>({
     resolver: zodResolver(usuarioSchema),
     defaultValues: {
@@ -79,7 +76,6 @@ export function UsuarioDialog({
     },
   });
 
-  // Atualizar valores do form quando o usuário mudar
   useEffect(() => {
     if (usuario) {
       form.reset({
@@ -100,9 +96,7 @@ export function UsuarioDialog({
     }
   }, [usuario, form]);
 
-  // Função de submissão
   const onSubmit = (data: UsuarioFormValues) => {
-    // Criar um objeto usuário completo
     const novoUsuario: Usuario = {
       ...data,
       dataRegistro: new Date().toLocaleString("pt-BR", {
