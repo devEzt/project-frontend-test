@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/drawer";
 import { Toast } from "@/components/ui/toast";
 import { filialsMockData } from "@/data/mocks";
-import { FilialContext, useFilial } from "@/lib/hooks/use-filial";
+import { FilialContext } from "@/lib/hooks/use-filial";
 
 export default function UsuariosPage() {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
