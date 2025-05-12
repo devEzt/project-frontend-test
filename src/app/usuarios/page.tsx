@@ -15,13 +15,16 @@ export default function UsuariosPage() {
   const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [statusAtivo, setStatusAtivo] = useState(true);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleOpenDrawer = (usuario?: Usuario) => {
     if (usuario) {
       setUsuarioEmEdicao(usuario);
+      setStatusAtivo(usuario.status === "Ativo");
     } else {
       setUsuarioEmEdicao(null);
+      setStatusAtivo(true);
     }
     setIsAddUserOpen(true);
   };
@@ -47,6 +50,18 @@ export default function UsuariosPage() {
     setTimeout(() => {
       setToastOpen(false);
     }, 5000);
+  };
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const novoStatus = e.target.checked;
+    console.log("Alterando status para:", novoStatus);
+    setStatusAtivo(novoStatus);
+  };
+
+  const toggleStatus = () => {
+    const novoStatus = !statusAtivo;
+    console.log("Toggle status para:", novoStatus);
+    setStatusAtivo(novoStatus);
   };
 
   return (
@@ -203,21 +218,29 @@ export default function UsuariosPage() {
                 </p>
               </div>
               <div className="flex items-center">
-                <div className="relative inline-block w-10 mr-2 align-middle">
+                <div
+                  className="relative inline-block w-10 mr-2 align-middle"
+                  onClick={toggleStatus}
+                >
                   <input
                     type="checkbox"
                     name="status"
                     id="status"
                     className="sr-only peer cursor-pointer"
-                    defaultChecked={
-                      usuarioEmEdicao
-                        ? usuarioEmEdicao.status === "Ativo"
-                        : true
-                    }
+                    checked={statusAtivo}
+                    onChange={handleStatusChange}
                   />
-                  <div className="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#102822] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all cursor-pointer"></div>
+                  <div
+                    className="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#102822] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all cursor-pointer"
+                    onClick={toggleStatus}
+                  ></div>
                 </div>
-                <span className="text-[14px] text-gray-700">Ativo</span>
+                <span
+                  className="text-[14px] text-gray-700 cursor-pointer"
+                  onClick={toggleStatus}
+                >
+                  {statusAtivo ? "Ativo" : "Inativo"}
+                </span>
               </div>
             </div>
           </div>
