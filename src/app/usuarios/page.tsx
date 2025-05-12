@@ -1,17 +1,21 @@
 "use client";
 
 import { UserList, Usuario } from "@/components/usuarios/user-list";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Sheet,
   SheetClose,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/drawer";
+import { Toast } from "@/components/ui/toast";
 
 export default function UsuariosPage() {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleOpenDrawer = (usuario?: Usuario) => {
     if (usuario) {
@@ -25,6 +29,29 @@ export default function UsuariosPage() {
   const handleCloseDrawer = () => {
     setIsAddUserOpen(false);
     setUsuarioEmEdicao(null);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Aqui você implementaria a lógica para adicionar ou salvar o usuário
+
+    // Fecha o drawer
+    handleCloseDrawer();
+
+    // Mostra o toast com a mensagem apropriada
+    if (usuarioEmEdicao) {
+      setToastMessage("Usuário editado com sucesso!");
+    } else {
+      setToastMessage("Usuário adicionado com sucesso!");
+    }
+
+    setToastOpen(true);
+
+    // Fecha o toast após 4 segundos
+    setTimeout(() => {
+      setToastOpen(false);
+    }, 4000);
   };
 
   return (
@@ -56,7 +83,7 @@ export default function UsuariosPage() {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="mt-6 space-y-6">
+        <form ref={formRef} onSubmit={handleSubmit} className="mt-6 space-y-6">
           <div className="space-y-2">
             <label
               htmlFor="nome"
@@ -70,6 +97,7 @@ export default function UsuariosPage() {
               placeholder="Digite o nome"
               defaultValue={usuarioEmEdicao?.nome || ""}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
+              required
             />
           </div>
 
@@ -86,6 +114,7 @@ export default function UsuariosPage() {
               placeholder="Digite o e-mail"
               defaultValue={usuarioEmEdicao?.email || ""}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#102822] text-gray-500 text-sm"
+              required
             />
           </div>
 
@@ -213,8 +242,14 @@ export default function UsuariosPage() {
               {usuarioEmEdicao ? "Salvar" : "Adicionar"}
             </button>
           </div>
-        </div>
+        </form>
       </Sheet>
+
+      <Toast
+        open={toastOpen}
+        onClose={() => setToastOpen(false)}
+        message={toastMessage}
+      />
     </div>
   );
 }
